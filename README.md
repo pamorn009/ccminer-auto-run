@@ -1,40 +1,61 @@
-# Pre-compiled CCMiner for Termux:
-This is a WIP repo for pre-compiled ccminer binaries with latest Termux(v0.118.0) and latest Clang(v17.0.6).
+## CCMiner auto run on Termux
 
-# **`Disclaimer: I accept no warranties or liabilities on this repo. Do it at your own risk!!!`**
+**`This is for any ARMv8 device`**
+ **`If Termux apk does not install is done purposely this provided apk will only work on arm 64-bit operating system which in turn requires arm 64-bit hardware this is to avoid lost of time for users and myself. (Mining on 32-bit devices is not profitable)`**
 
-# **`This is for any ARMv8 device`**
+[English](#installation) | [Thai](#การติดตั้ง)
 
-# **`If Termux apk does not install is done purposely this provided apk will only work on arm 64-bit operating system which in turn requires arm 64-bit hardware this is to avoid lost of time for users and myself. (Mining on 32-bit devices is not profitable)`**
-
-# Installation:
-1. Download & install latest arm64-v8a [Termux](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_arm64-v8a.apk):
+ ## Installation:
+1. Download & install latest arm64-v8a Termux [Download](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_arm64-v8a.apk):
 ```
 https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_arm64-v8a.apk
 ```
-2. Get Termux ready:
+2. Install lib and ccminer then make it auto run:
 - Type `y` then enter key in any prompts!
+
 ```
-yes | pkg update -y
-yes | pkg upgrade -y
-yes | pkg install libjansson wget nano -y
+pkg update -y && pkg upgrade -y && \
+pkg install libjansson wget nano -y && \
+mkdir -p ccminer && cd ccminer && \
+wget https://github.com/rismzun/ccminer-auto-run/blob/main/ccminer && \
+wget https://github.com/rismzun/ccminer-auto-run/blob/main/config.json && \
+wget https://github.com/rismzun/ccminer-auto-run/blob/main/start.sh && \
+chmod +x ccminer start.sh && \
+echo 'bash /data/data/com.termux/files/home/ccminer/start.sh' >> /data/data/com.termux/files/usr/etc/bash.bashrc && \
+bash /data/data/com.termux/files/home/ccminer/start.sh
 ```
-3. Download ccminer, config, start:
-```
-mkdir ccminer && cd ccminer
-wget https://raw.githubusercontent.com/Darktron/pre-compiled/generic/ccminer
-wget https://raw.githubusercontent.com/Darktron/pre-compiled/generic/config.json
-wget https://raw.githubusercontent.com/Darktron/pre-compiled/generic/start.sh
-chmod +x ccminer start.sh
-```
-# Usage:
+
+## Usage:
 
 1. Edit your pools, address, worker name:
-- Pools use the `"disabled"` feature so `1` = Off (not used) while `0` = On (will use this pool)
+- Pools use the `"disabled"` feature so
+`1` = Off (not used)
+`0` = On (will use this pool)
+
 - Address & worker name is near the bottom of the config.json in format `address here.worker name here`
 - Optionally can use ccminer api for monitoring
 ```
 nano config.json
+```
+**config.json (Preview):**
+```json
+{
+	"pools":
+		[{
+			"name": "WW-ZERGPOOL",
+			"url":"stratum+tcp://verushash.asia.mine.zergpool.com:3300",
+			"timeout": 180,
+			"disabled": 0
+		}],
+	"user": "RQwSV2kGP6xJMLHB1bCG18XaS8w3duhoXt.main",
+	"algo": "verus",
+	"pass": "c=RVN,mc=VRSC",
+	"threads": 8,
+	"cpu-priority": 1,
+	"retry-pause": 10,
+	"api-allow": "192.168.0.0/16",
+	"api-bind": "0.0.0.0:4068"
+}
 ```
 2. Start ccminer with:
 ```
@@ -44,11 +65,62 @@ nano config.json
 ```
 CTRL + c
 ```
-# Tips & Tricks:
-- If Termux can't complete update & upgrade please clear app cache and data.
-- Disable battery manager, battery optimization for Termux app.
-- If you have a "protect battery" option to stop charge at 85% or similar enable it to help preserve battery health.
-- If you long press anywhere within Termux then click `More` there is an option to `Keep screen on`.
-- Alternatively you can pull down the notification drawer and expand Termux notification to `Acquire wakelock` this will enable you to mine with the screen off **(NOTE! not all devices obey this rule is a hit or miss)**
-- Use a pool with low latency to your location/internet.
-- Give the miner/stratum time to stabilize hashrate(~30m-1h).
+# การติดตั้ง:
+
+1. ดาวน์โหลดและติดตั้ง Termux arm64-v8a เวอร์ชันล่าสุด [ดาวน์โหลด](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_arm64-v8a.apk):
+
+```
+https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_arm64-v8a.apk
+```
+2. ติดตั้ง lib และ ccminer แล้วตั้งค่าให้รันอัตโนมัติ:
+- หาก command ถามให้พิมพ์ `y` แล้วกด enter
+```
+pkg update -y && pkg upgrade -y && \
+pkg install libjansson wget nano -y && \
+mkdir -p ccminer && cd ccminer && \
+wget https://github.com/rismzun/ccminer-auto-run/blob/main/ccminer && \
+wget https://github.com/rismzun/ccminer-auto-run/blob/main/config.json && \
+wget https://github.com/rismzun/ccminer-auto-run/blob/main/start.sh && \
+chmod +x ccminer start.sh && \
+echo 'bash /data/data/com.termux/files/home/ccminer/start.sh' >> /data/data/com.termux/files/usr/etc/bash.bashrc && \
+bash /data/data/com.termux/files/home/ccminer/start.sh
+```
+# การใช้งาน:
+1. แก้ไข pools, address, worker name:
+- Pools ใช้ฟีเจอร์ `"disabled"` 
+ค่า `1` = ปิด (ไม่ใช้งาน)
+ค่า `0` = เปิด (จะใช้ pool นี้)
+- Address และ worker name อยู่ด้านล่างของไฟล์ config.json ในรูปแบบ
+`เลขกระเป๋า.ชื่อ`
+```
+nano config.json
+```
+**config.json (ตัวอย่าง):**
+
+```json
+{
+	"pools":
+		[{
+			"name": "WW-ZERGPOOL",
+			"url":"stratum+tcp://verushash.asia.mine.zergpool.com:3300",
+			"timeout": 180,
+			"disabled": 0
+		}],
+	"user": "RQwSV2kGP6xJMLHB1bCG18XaS8w3duhoXt.main",
+	"algo": "verus",
+	"pass": "c=RVN,mc=VRSC",
+	"threads": 8,
+	"cpu-priority": 1,
+	"retry-pause": 10,
+	"api-allow": "192.168.0.0/16",
+	"api-bind": "0.0.0.0:4068"
+}
+```
+2. เริ่มต้น ccminer ด้วย:
+```
+~/ccminer/start.sh
+```
+3. ปิด ccminer ด้วย:
+```
+CTRL + c
+```
